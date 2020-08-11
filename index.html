@@ -20,13 +20,41 @@
 <h1>Snake 9000</h1>
 <h2>Coming soon</h2>
 <div id="cage" class="cage">
-  <div id="snake" class="snake"></div>
+  <div onkeydown="getKeyAndMove(event)" id="snake" class="snake"></div>
 </div>
+<div>
+  <script>
+    let objImage = null;
+    function move() {
+      objImage = document.getElementById("#snake");
+      objImage.style.position = "relative";
+      objImage.style.left = "0px";
+      objImage, (style.top = "0px");
+    }
+    function getKeyAndMove(e) {
+      let key_Code = e.switch || e.keyCode;
+      switch (key_code) {
+        case 37:
+          moveLeft();
+          break;
+        case 38:
+          moveUp();
+          break;
+        case 39:
+          moveRight();
+          break;
+        case 40:
+          moveDown();
+          break;
+      }
 
-<script>
-  const snakeEl = document.querySelector("#snake");
-  snake.style.left = 10;
-  snakeEl.addEventListener("click", function (event) {
-    snakeEl.style.left = parseInt(snakeEl.style.left) + 10;
-  });
-</script>
+      function moveLeft() {
+        objImage.style.left = parseInt(objImage.style.left) - 10 + "px";
+      }
+      function moveUp() {
+        objImage.style.top = parseInt(objectImage.style.top) - 10 + "px";
+      }
+    }
+  </script>
+</div>
+v
