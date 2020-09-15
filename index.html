@@ -15,46 +15,110 @@
     left: 10px;
     top: 10px;
   }
+  .food {
+    width: 50px;
+    height: 50px;
+    background: rgb(230, 226, 11);
+    border-radius: 4px;
+    position: absolute;
+    left: 10px;
+    top: 10px;
+  }
 </style>
 
 <h1>Snake 9000</h1>
 <h2>Coming soon</h2>
 <div id="cage" class="cage">
-  <div onkeydown="getKeyAndMove(event)" id="snake" class="snake"></div>
+  <div id="food" class="food"></div>
+  <div id="snake" class="snake"></div>
 </div>
 <div>
   <script>
-    let objImage = null;
-    function move() {
-      objImage = document.getElementById("#snake");
-      objImage.style.position = "relative";
-      objImage.style.left = "0px";
-      objImage, (style.top = "0px");
+    let snake = null;
+    let cage = 300;
+    let food = null;
+    console.log(cage);
+
+    const placeFood = () => {
+      const foodLeft = Math.floor(Math.random() * 25) * 10;
+      food.style.left = foodLeft + "px";
+    };
+
+    function start() {
+      snake = document.querySelector("#snake");
+      console.log(snake);
+      snake.style.position = "absolute";
+      snake.style.left = "0px";
+      snake.style.top = "0px";
+      document.addEventListener("keydown", getKeyAndMove);
+      food = document.querySelector("#food");
+      console.log(food);
+      food.style.position = "absolute";
+      food.style.left = "0px";
+      food.style.top = "0px";
+      placeFood();
     }
-    function getKeyAndMove(e) {
-      let key_Code = e.switch || e.keyCode;
-      switch (key_code) {
-        case 37:
-          moveLeft();
+
+    start();
+
+    function moveLeft() {
+      const snakeLeft = parseInt(snake.style.left);
+      if (snakeLeft > 0) {
+        snake.style.left = snakeLeft - 10 + "px";
+      }
+    }
+    function moveUp() {
+      const snakeUp = parseInt(snake.style.top);
+      if (snakeUp > 0) {
+        snake.style.top = snakeUp - 10 + "px";
+      }
+    }
+    function moveRight() {
+      const snakeLeft = parseInt(snake.style.left);
+      if (snakeLeft < 250) {
+        snake.style.left = snakeLeft + 10 + "px";
+      }
+    }
+    function moveDown() {
+      const snakeUp = parseInt(snake.style.top);
+      if (snakeUp < 250) {
+        snake.style.top = snakeUp + 10 + "px";
+      }
+    }
+
+    function move(dir) {
+      const snakeLeft = parseInt(snake.style.left);
+      const snakeUpp = parseInt(snake.style.up);
+
+      switch (dir) {
+        case "left":
+          if (snakeLeft > 0) {
+            snake.style.left = snakeLeft - 10 + "px";
+          }
           break;
-        case 38:
+        default:
+          break;
+      }
+    }
+
+    // for (i = "cage - snake"; i )
+    function getKeyAndMove(e) {
+      console.log(e);
+      let keyName = e.key;
+      switch (keyName) {
+        case "ArrowLeft":
+          move("left");
+          break;
+        case "ArrowUp":
           moveUp();
           break;
-        case 39:
+        case "ArrowRight":
           moveRight();
           break;
-        case 40:
+        case "ArrowDown":
           moveDown();
           break;
-      }
-
-      function moveLeft() {
-        objImage.style.left = parseInt(objImage.style.left) - 10 + "px";
-      }
-      function moveUp() {
-        objImage.style.top = parseInt(objectImage.style.top) - 10 + "px";
       }
     }
   </script>
 </div>
-v
