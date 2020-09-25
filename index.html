@@ -7,19 +7,19 @@
     position: relative;
   }
   .snake {
-    width: 50px;
-    height: 50px;
+    width: 10px;
+    height: 10px;
     background: rgb(40, 219, 40);
-    border-radius: 4px;
+    border-radius: 2px;
     position: absolute;
     left: 10px;
     top: 10px;
   }
   .food {
-    width: 50px;
-    height: 50px;
+    width: 10px;
+    height: 10px;
     background: rgb(230, 226, 11);
-    border-radius: 4px;
+    border-radius: 2px;
     position: absolute;
     left: 10px;
     top: 10px;
@@ -30,22 +30,46 @@
 <h2>Coming soon</h2>
 <div id="cage" class="cage">
   <div id="food" class="food"></div>
-  <div id="snake" class="snake"></div>
+  <!-- <div id="snake" class="snake"></div> -->
 </div>
 <div>
   <script>
-    let snake = null;
-    let cage = 300;
+    let snake = document.createElement("div");
+    snake.className = "snake";
+    let snakes = [{ left: 10, top: 10 }];
+    let cage = null;
     let food = null;
     console.log(cage);
 
     const placeFood = () => {
       const foodLeft = Math.floor(Math.random() * 25) * 10;
       food.style.left = foodLeft + "px";
+      const foodUp = Math.floor(Math.random() * 25) * 10;
+      food.style.top = foodUp + "px";
     };
 
+    const placeSnake = () => {
+      console.log(snakes);
+      const snakeNodes = document.querySelectorAll(".snake");
+      snakeNodes.forEach((snakeNode) => {
+        snakeNode.remove();
+      });
+      for (let i = 0; i < snakes.length; i++) {
+        let snakePos = snakes[i];
+        const snakeClone = snake.cloneNode();
+        snakeClone.id = "snake-" + i;
+        snakeClone.style.position = "absolute";
+        snakeClone.style.left = snakePos.left + "px";
+        snakeClone.style.top = snakePos.top + "px";
+        cage.append(snakeClone);
+      }
+    };
+
+    const snakeGrow = () => {};
+
     function start() {
-      snake = document.querySelector("#snake");
+      // snake = document.querySelector("#snake");
+      cage = document.querySelector("#cage");
       console.log(snake);
       snake.style.position = "absolute";
       snake.style.left = "0px";
@@ -57,51 +81,56 @@
       food.style.left = "0px";
       food.style.top = "0px";
       placeFood();
+      placeSnake();
     }
 
     start();
 
-    function moveLeft() {
-      const snakeLeft = parseInt(snake.style.left);
-      if (snakeLeft > 0) {
-        snake.style.left = snakeLeft - 10 + "px";
-      }
-    }
-    function moveUp() {
-      const snakeUp = parseInt(snake.style.top);
-      if (snakeUp > 0) {
-        snake.style.top = snakeUp - 10 + "px";
-      }
-    }
-    function moveRight() {
-      const snakeLeft = parseInt(snake.style.left);
-      if (snakeLeft < 250) {
-        snake.style.left = snakeLeft + 10 + "px";
-      }
-    }
-    function moveDown() {
-      const snakeUp = parseInt(snake.style.top);
-      if (snakeUp < 250) {
-        snake.style.top = snakeUp + 10 + "px";
-      }
-    }
-
     function move(dir) {
-      const snakeLeft = parseInt(snake.style.left);
-      const snakeUpp = parseInt(snake.style.up);
+      let snakeLeft = snakes[0].left;
+      let snakeUp = snakes[0].top;
+      let foodUp = parseInt(food.style.top);
+      let foodLeft = parseInt(food.style.left);
+      let newSnakeLeft = snakes[0].left;
+      let newSnakeUp = snakes[0].top;
 
       switch (dir) {
         case "left":
           if (snakeLeft > 0) {
-            snake.style.left = snakeLeft - 10 + "px";
+            //  snake.style.left = snakeLeft - 10 + "px";
+            snakes.unshift({ left: snakeLeft - 10, top: snakeUp });
+            newSnakeLeft = snakeLeft - 10;
           }
           break;
-        default:
+        case "up":
+          if (snakeUp > 0) {
+            snakes.unshift({ left: snakeLeft, top: snakeUp - 10 });
+          }
+          break;
+        case "right":
+          if (snakeLeft < 290) {
+            snakes.unshift({ left: snakeLeft + 10, top: snakeUp });
+          }
+          break;
+        case "down":
+          if (snakeUp < 290) {
+            snakes.unshift({ left: snakeLeft, top: snakeUp + 10 });
+          }
           break;
       }
+
+      foodUp = parseInt(food.style.top);
+      foodLeft = parseInt(food.style.left);
+      if (snakes[0].top === foodUp && snakes[0].left === foodLeft) {
+        placeFood();
+        snakeGrow();
+      } else {
+        snakes.pop();
+      }
+
+      placeSnake();
     }
 
-    // for (i = "cage - snake"; i )
     function getKeyAndMove(e) {
       console.log(e);
       let keyName = e.key;
@@ -110,15 +139,18 @@
           move("left");
           break;
         case "ArrowUp":
-          moveUp();
+          move("up");
           break;
         case "ArrowRight":
-          moveRight();
+          move("right");
           break;
         case "ArrowDown":
-          moveDown();
+          move("down");
           break;
       }
+      // const foodGrab = () => {
+
+      // };
     }
   </script>
 </div>
